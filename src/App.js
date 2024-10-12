@@ -9,6 +9,7 @@ import RegisterPage from './Pages/Register';
 import { fetchUser } from './Function/Authentication';
 import { message } from 'antd';
 import UserProfile from './Pages/User Page';
+import PublicUser from './Pages/Public User';
 
 function App (Page) {
   const [currentPage, setCurrentPage] = useState(<Loading/>);
@@ -38,8 +39,8 @@ function App (Page) {
           setCurrentPage(<RegisterPage/>); 
           break;
       default:
-        if(regex.test(Page)){
-            
+        if(regex.test(pageSlug)){
+            setCurrentPage(<PublicUser/>)
         }else{
           setCurrentPage(<NotFound/>);
         }

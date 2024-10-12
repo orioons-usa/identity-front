@@ -14,3 +14,15 @@ export const updateUser = (token, data) => {
         })
     })
 }
+
+
+export const getPublicProfile = (token, data) => {
+    return new Promise((res, rej)=>{
+        axios.get(`https://api.id.intredia.com/${token}`, {...data}, {
+        }).then((e)=>{
+            res(e.data)
+        }).catch((e)=>{
+            rej(e)
+        })
+    })
+}
