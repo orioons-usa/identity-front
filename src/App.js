@@ -40,7 +40,7 @@ function App (Page) {
           break;
       default:
         
-        if(regex.test(pageSlug.replace(/\s+/g, ''))){
+        if(regex.test(pageSlug.replaceAll("%20", ''))){
             setCurrentPage(<PublicUser/>)
         }else{
           setCurrentPage(<NotFound/>);
