@@ -28,13 +28,13 @@ const PublicUser = () => {
     name: '',
     email: '',
     profile: {
-      phones: Array(5).fill(''), // Initialize with 5 empty phone fields
-      emails: Array(5).fill(''), // Initialize with 5 empty email fields
-      socials: Array(10).fill(''), // Initialize with 10 empty social fields
+      phones: Array(0).fill(''), // Initialize with 5 empty phone fields
+      emails: Array(0).fill(''), // Initialize with 5 empty email fields
+      socials: Array(0).fill(''), // Initialize with 10 empty social fields
       company: '',
       bio: '',
-      experience: Array(10).fill({ role: '', company: '', duration: '' }), // Initialize with 10 empty experience objects
-      education: Array(5).fill({ degree: '', institution: '', year: '' }), // Initialize with 5 empty education objects
+      experience: Array(0).fill({ role: '', company: '', duration: '' }), // Initialize with 10 empty experience objects
+      education: Array(0).fill({ degree: '', institution: '', year: '' }), // Initialize with 5 empty education objects
     },
   });
 
