@@ -105,9 +105,9 @@ const PublicUser = () => {
               />
             </div>
             <div className="w-full md:w-2/3 bg-white flex flex-col space-y-2 p-3">
-              <Text className="font-black text-gray-800 md:text-3xl text-xl">
-                {userData.name}
-              </Text>
+              <h2 className="font-black text-gray-800 md:text-3xl text-xl">
+                {userData.profile.name}
+              </h2>
               <Text>{userData.email}</Text>
               <Text className="block text-gray-500">Company: {userData.profile.company}</Text>
               <p className="md:text-lg text-gray-500 text-base">{userData.profile.bio}</p>
