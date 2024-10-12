@@ -19,11 +19,13 @@ import { fetchUser } from '../../Function/Authentication';
 import getSocialIcon from '../../Misc/Social Icons';
 import { root } from '../..';
 import NotFound from '../../Misc/Not Found';
+import Loading from '../../Misc/Loading';
 
 const { Title, Text } = Typography;
 
 const PublicUser = () => {
   const [form] = Form.useForm();
+  const [loaded, setLoaded] = useState(false)
   const [userData, setUserData] = useState({
     name: '',
     email: '',
@@ -46,9 +48,9 @@ const PublicUser = () => {
     getPublicProfile(userId).then((data) => {
       const defaultData = {
         profile: data,
-       
       };
       setUserData(defaultData);
+      setLoaded(true)
     }).catch((e)=>{
       root.render(<NotFound/>)
     });
@@ -92,7 +94,9 @@ const PublicUser = () => {
   ];
 
   return (
-    <div className="profile-container">
+    <>
+    {
+      !loaded ? <Loading/> : <div className="profile-container">
       
       <Card className="user-profile-card">
         <div className="flex flex-col justify-center">
@@ -140,31 +144,12 @@ const PublicUser = () => {
       <Divider />
       <p className="text-center text-gray-500">INTREDIA IDENTITY</p>
     </div>
+
+    }
+    </>
   );
 };
 
-const ProfileEditableFields = ({ form, fieldName, label, placeholder }) => (
-  <Form.List name={['profile', fieldName]}>
-    {(fields, { add, remove }) => (
-      <>
-        <div className="flex">
-          <Title level={5}>{label}</Title>
-          <Button type="link" onClick={() => add()}>
-            + Add {label}
-          </Button>
-        </div>
-        {fields.map((field, index) => (
-          <Form.Item key={field.key} label={`${label} ${index + 1}`} {...field}>
-            <Input placeholder={placeholder} />
-            <Button type="link" danger onClick={() => remove(field.name)}>
-              Remove
-            </Button>
-          </Form.Item>
-        ))}
-      </>
-    )}
-  </Form.List>
-);
 
 const ProfileDetailsSection = ({ title, data }) => (
   <div className="profile-section">
