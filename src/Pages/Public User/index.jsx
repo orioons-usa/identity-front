@@ -20,6 +20,7 @@ import getSocialIcon from '../../Misc/Social Icons';
 import { root } from '../..';
 import NotFound from '../../Misc/Not Found';
 import Loading from '../../Misc/Loading';
+import Logo from '../Logo';
 
 const { Title, Text } = Typography;
 
@@ -97,7 +98,9 @@ const PublicUser = () => {
     <>
     {
       !loaded ? <Loading/> : <div className="profile-container">
-      
+       <div className='m-2'>
+       <Logo/>
+       </div>
       <Card className="user-profile-card">
         <div className="flex flex-col justify-center">
           <div className=" flex flex-col md:flex-row space-y-3 md:space-y-0 rounded-xl shadow-lg w-full md:max-w-3xl mx-auto border border-white bg-white">
