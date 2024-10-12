@@ -39,7 +39,8 @@ function App (Page) {
           setCurrentPage(<RegisterPage/>); 
           break;
       default:
-        if(regex.test(pageSlug)){
+        
+        if(regex.test(pageSlug.replace(/\s+/g, ''))){
             setCurrentPage(<PublicUser/>)
         }else{
           setCurrentPage(<NotFound/>);
