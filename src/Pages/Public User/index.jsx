@@ -99,15 +99,15 @@ const PublicUser = () => {
           <div className=" flex flex-col md:flex-row space-y-3 md:space-y-0 rounded-xl shadow-lg w-full md:max-w-3xl mx-auto border border-white bg-white">
             <div className="w-full md:w-1/3 bg-white grid place-items-center">
               <img
-                src="https://images.pexels.com/photos/4381392/pexels-photo-4381392.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                src={userData.profile.image}
                 alt="User Image"
                 className="rounded-full w-32"
               />
             </div>
             <div className="w-full md:w-2/3 bg-white flex flex-col space-y-2 p-3">
-              <h3 className="font-black text-gray-800 md:text-3xl text-xl">
+              <Text className="font-black text-gray-800 md:text-3xl text-xl">
                 {userData.name}
-              </h3>
+              </Text>
               <Text>{userData.email}</Text>
               <Text className="block text-gray-500">Company: {userData.profile.company}</Text>
               <p className="md:text-lg text-gray-500 text-base">{userData.profile.bio}</p>
