@@ -44,8 +44,7 @@ const PublicUser = () => {
   // Fetch user data on component mount
   useEffect(() => {
     let t = window.location.pathname.split("/")
-    const userId = t[1]
-    console.log(userId)
+    const userId = t[1].replace(/\s+/g, '')
     getPublicProfile(userId).then((data) => {
       const defaultData = {
         profile: data,
