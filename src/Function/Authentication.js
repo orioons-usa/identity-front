@@ -12,7 +12,7 @@ export const LoginUser = (email, password) => {
 }
 export const registerUser = (name, email, password, id) => {
     return new Promise((res, rej)=>{
-     axios.post("https://api.id.intredia.com/api/auth/register", {name, email, password, id}).then((e)=>{
+     axios.post("https://api.id.intredia.com/api/auth/register", {name, email, password, id, profile: {name : name, email : email,}}).then((e)=>{
          res(e.data)
      }).catch((e)=>{
          rej(e)
