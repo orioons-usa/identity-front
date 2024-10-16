@@ -15,7 +15,7 @@ const ActivationPage = () => {
        { key: "paymentQR",
         label: "Show Payment QR",
         children:  <center>
-        <QRCode value={paymentUrl || '-'} status={sd === false ? "loading" : "active"} />
+        <QRCode value={paymentUrl} status={sd === false ? "loading" : "active"} />
         {paymentUrl}
         </center>
        }
