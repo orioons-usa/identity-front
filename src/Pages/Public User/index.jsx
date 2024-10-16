@@ -140,7 +140,7 @@ const PublicUser = () => {
                 </button>
            
 
-            <button onClick={shareCurrentURL} className={`flex w-full ml-1 items-center justify-center flex-none px-3 py-2 md:px-4 md:py-3 border-2 rounded-lg font-medium border-black bg-black text-white`}>
+            <button onClick={shareCurrentURL} className={`flex  ml-1 items-center justify-center flex-none px-3 py-2 md:px-4 md:py-3 border-2 rounded-lg font-medium border-black bg-black text-white`}>
                  <SendOutlined /> <span className='ml-2'>SHARE</span>
                 </button>
            
