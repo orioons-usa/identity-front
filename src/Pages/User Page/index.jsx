@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Drawer, Button, Input, message, Tabs, Space, Card } from 'antd';
+import { Drawer, Button, Input, message, Tabs, Space, Card, Divider } from 'antd';
 import { EditOutlined, PlusOutlined, MinusOutlined, PhoneFilled, MailFilled } from '@ant-design/icons';
 import { updateUser } from '../../Function/Profile';
 import { fetchUser } from '../../Function/Authentication';
