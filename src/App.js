@@ -8,6 +8,7 @@ import { fetchUser } from './Function/Authentication';
 import { message } from 'antd';
 import UserProfile from './Pages/User Page';
 import PublicUser from './Pages/Public User';
+import ActivationPage from './Misc/Activation';
 
 function App (Page) {
   const [currentPage, setCurrentPage] = useState(<Loading/>);
@@ -35,6 +36,9 @@ function App (Page) {
           setCurrentPage(<LoginPage/>); 
         }
         break;
+        case "activate":
+          setCurrentPage(<ActivationPage/>); 
+          break;
         case "login":
           setCurrentPage(<LoginPage/>); 
           break;
