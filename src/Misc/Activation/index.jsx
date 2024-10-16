@@ -8,7 +8,7 @@ import { checkPaymentStatus } from "../../Function/Authentication"
 const ActivationPage = () => {
       const [email, setEmail] = useState("")
       const [sd, setSD] = useState(false)
-      const [ paymentUrl, setPaymentUrl] = useState("")
+      const [ paymentUrl, setPaymentUrl] = useState(false)
       const [ errorMes, setErrorMes] = useState(false)
 
       const qr = [
@@ -27,23 +27,21 @@ const ActivationPage = () => {
             _o.splice(0,2)
               _o = _o[0]
                if(emailRegex.test(_o) === true){
-                  setEmail(_o)
+                  if(paymentUrl === false){
+                    setEmail(_o)
                   checkPaymentStatus(email).then((ek)=>{
                       setPaymentUrl(ek.link)
-                      console.log(paymentUrl)
                   }).catch((ek)=>{
                     
                     setSD(true)
                   })
+                  }
                }else{
                   setErrorMes(true)
                }
                 
       })
 
-setInterval((e)=>{
-  console.log(paymentUrl)
-}, 1000)
 
 return(<>
         <style
