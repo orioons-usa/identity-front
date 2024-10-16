@@ -35,7 +35,7 @@ const PublicUser = () => {
     const { profile } = userData;
   
     
-    var contact = "BEGIN:VCARD\nVERSION:4.0\nFN:" + profile.name + "\nTEL;TYPE=work,voice:" + profile.phones[0] + "\nEMAIL:" + profile.emails[0] +"\nURL:" + profile.socials.join(',') + "\nEND:VCARD";
+    var vcard = "BEGIN:VCARD\nVERSION:4.0\nFN:" + profile.name + "\nTEL;TYPE=work,voice:" + profile.phones[0] + "\nEMAIL:" + profile.emails[0] +"\nURL:" + profile.socials.join(',') + "\nEND:VCARD";
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
   
     if (isSafari) {
