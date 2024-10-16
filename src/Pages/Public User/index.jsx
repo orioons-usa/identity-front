@@ -135,12 +135,12 @@ const PublicUser = () => {
             <Divider></Divider>
             <div className="flex">
 
-            <button onClick={handleSaveContact} className={`flex items-center justify-center flex-none px-3 py-2 md:px-4 md:py-3 border-2 rounded-lg font-medium border-black bg-black text-white`}>
+            <button onClick={handleSaveContact} className={`flex mx-1 items-center justify-center flex-none px-3 py-2 md:px-4 md:py-3 border-2 rounded-lg font-medium border-black bg-black text-white`}>
                  <PlusOutlined /> <span className='ml-2'>ADD TO CONTACT</span>
                 </button>
            
 
-            <button onClick={shareCurrentURL} className={`flex items-center justify-center flex-none px-3 py-2 md:px-4 md:py-3 border-2 rounded-lg font-medium border-black bg-black text-white`}>
+            <button onClick={shareCurrentURL} className={`flex  mx-1items-center justify-center flex-none px-3 py-2 md:px-4 md:py-3 border-2 rounded-lg font-medium border-black bg-black text-white`}>
                  <SendOutlined /> <span className='ml-2'></span>
                 </button>
            
@@ -153,7 +153,7 @@ const PublicUser = () => {
             <TabPane tab="Emails" key="1">
               <ul className="text-left">
                 {userData.profile.emails.map((email, index) => (
-                  <li className='w-full my-2 rounded-lg px-3 py-2 flex ' key={index}>
+                  <li className='w-full my-2 bordered border-[1px]-gray rounded-lg px-3 py-2 flex ' key={index}>
                     <PhoneFilled/> <a className='ml-2' href={`mailto:${email}`}>{email}</a>
                   </li>
                 ))}
@@ -162,7 +162,7 @@ const PublicUser = () => {
             <TabPane tab="Phones" key="2">
               <ul className="text-left">
                 {userData.profile.phones.map((phone, index) => (
-                  <li className='w-full my-2 rounded-lg px-3 py-2 flex ' key={index}>
+                  <li className='w-full my-2 bordered border-[1px]-gray rounded-lg px-3 py-2 flex ' key={index}>
                    <MailFilled/> <a className='ml-2' href={`tel:${phone}`}>{phone}</a>
                   </li>
                 ))}
