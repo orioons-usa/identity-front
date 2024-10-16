@@ -34,43 +34,20 @@ const PublicUser = () => {
   const handleSaveContact = () => {
     const { profile } = userData;
   
-    // vCard content
-    const contact = `
-      BEGIN:VCARD
-      VERSION:3.0
-      N:${profile.name}
-      ORG:${profile.company}
-      EMAIL:${profile.emails[0]}
-      TEL:${profile.phones[0]}
-      NOTE:${profile.bio}
-      URL:${profile.socials.join(',')}
-      END:VCARD
-    `;
-  
-    // Create a blob with the vCard content and proper MIME type
-    const blob = new Blob([contact], { type: 'text/vcard' });
-  
-    // Check for iOS Safari
+    
+    var contact = "BEGIN:VCARD\nVERSION:4.0\nFN:" + profile.name + "\nTEL;TYPE=work,voice:" + profile.phones[0] + "\nEMAIL:" + profile.emails[0] +"\nURL:" + profile.socials.join(',') + "\nEND:VCARD";
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
   
     if (isSafari) {
-      // For Safari (iOS), use a data URI for download
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const a = document.createElement('a');
-        a.href = reader.result;
-        a.download = `${profile.name}_contact.vcf`;
-        a.style.display = 'none'; // Hide the anchor tag
+      var blob = new Blob([vcard], { type: "text/vcard" });
+  var url = URL.createObjectURL(blob);
   
-        a.addEventListener('click', () => {
-          // User interaction triggers download
-        });
+  const newLink = document.createElement('a');
+  newLink.download = contact.name + ".vcf";
+  newLink.textContent = contact.name;
+  newLink.href = url;
   
-        document.body.appendChild(a);
-        a.click(); // Simulate a user click
-        document.body.removeChild(a);
-      };
-      reader.readAsDataURL(blob);
+  newLink.click();
     } else {
       // For other browsers, use Object URL
       const url = window.URL.createObjectURL(blob);
