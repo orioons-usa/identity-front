@@ -19,8 +19,13 @@ function App (Page) {
         let token = window.localStorage.getItem("_tex")
         if(token !== '' && token !== null && token !== undefined){
           fetchUser(token).then((e)=>{
-            window.localStorage.setItem("_vData", JSON.stringify(e))
-            setCurrentPage(<UserProfile/>)
+              if(e.subscriptionStatus !== "inactive"){
+                window.localStorage.setItem("_vData", JSON.stringify(e))
+                setCurrentPage(<UserProfile/>)
+              }else{
+                window.location = `https://id.intredia.com/activate/${e.email}`
+              }
+          
           }).catch((e)=>{
             message.info("Session Expired!")
             window.localStorage.setItem("_tex", "")
