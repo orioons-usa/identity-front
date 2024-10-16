@@ -31,57 +31,36 @@ const PublicUser = () => {
     return <p>Loading...</p>;
   }
 
+  
+
+
   const handleSaveContact = () => {
     const { profile } = userData;
-
-    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-
-    
-    // vCard content for the contact
-    const vcard = `
-    BEGIN:VCARD
-    VERSION:4.0
-    FN:${profile.name}
-    ORG:${profile.company}
-    EMAIL:${profile.emails[0]}
-    TEL;TYPE=work,voice:${profile.phones[0]}
-    NOTE:${profile.bio}
-    URL:${profile.socials.join(',')}
-    END:VCARD
-    `;
-    
-    // Create a blob with the vCard content
-    const blob = new Blob([vcard], { type: "text/vcard" });
-   
-    
-    
-
-  if (isSafari) {
-    // For Safari (iOS), use a data URI for download
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      const a = document.createElement('a');
-      a.href = reader.result;
-      a.download = `${profile.name}_contact.vcf`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    };
-    reader.readAsDataURL(blob);
-  } else {
-    // For other browsers, use Object URL
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${profile.name}_contact.vcf`;
-    document.body.appendChild(a);
-    a.click();
-    window.URL.revokeObjectURL(url); // Release the object URL after download
-    document.body.removeChild(a);
-  }
-    
-  };
   
+    // Create the vCard content
+    const vcard = `
+      BEGIN:VCARD
+      VERSION:3.0
+      FN:${profile.name}
+      ORG:${profile.company}
+      EMAIL:${profile.emails[0]}
+      TEL:${profile.phones[0]}
+      NOTE:${profile.bio}
+      URL:${profile.socials[0]}
+      END:VCARD
+    `.trim(); // Trim whitespace for cleaner formatting
+  
+    // Encode vCard content to create a data URL
+    const vCardDataUrl = `data:text/vcard;charset=utf-8,${encodeURIComponent(vcard)}`;
+  
+    // Create a temporary anchor element
+    const a = document.createElement('a');
+    a.href = vCardDataUrl;
+    a.download = `${profile.name}.vcf`; // Set filename
+    document.body.appendChild(a);
+    a.click(); // Trigger the download
+    document.body.removeChild(a); // Clean up
+  };
   
 
   return (
