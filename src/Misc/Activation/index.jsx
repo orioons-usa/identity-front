@@ -28,10 +28,10 @@ const ActivationPage = () => {
                if(emailRegex.test(_o)){
                   setEmail(_o)
                   checkPaymentStatus(email).then((e)=>{
+                    window.location = "./"
+                  }).catch((e)=>{
                     setPaymentUrl(e.link)
                     setSD(true)
-                  }).catch((e)=>{
-                    message.error("Error Occured: 3xB21")
                   })
                }else{
                   setErrorMes(true)
