@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Drawer, Button, Input, message } from 'antd';
-import { EditOutlined } from '@ant-design/icons';
+import { Drawer, Button, Input, message, Tabs, Space } from 'antd';
+import { EditOutlined, PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import { updateUser } from '../../Function/Profile';
 import { fetchUser } from '../../Function/Authentication';
 import getSocialIcon from '../../Misc/Social Icons';
-import 'tailwindcss/tailwind.css'; // Ensure Tailwind is loaded
+import 'tailwindcss/tailwind.css';
+
+const { TabPane } = Tabs;
 
 const UserProfile = () => {
   const [userData, setUserData] = useState(null);
@@ -31,6 +33,34 @@ const UserProfile = () => {
     setEditProfile({
       ...editProfile,
       [key]: value,
+    });
+  };
+
+  const addField = (key) => {
+    if (key === 'emails' && editProfile.emails.length >= 5) {
+      message.error('You can only add up to 5 emails');
+      return;
+    }
+    if (key === 'phones' && editProfile.phones.length >= 5) {
+      message.error('You can only add up to 5 phone numbers');
+      return;
+    }
+    if (key === 'socials' && editProfile.socials.length >= 10) {
+      message.error('You can only add up to 10 social links');
+      return;
+    }
+    setEditProfile({
+      ...editProfile,
+      [key]: [...editProfile[key], ''],
+    });
+  };
+
+  const removeField = (key, index) => {
+    const updatedArray = [...editProfile[key]];
+    updatedArray.splice(index, 1);
+    setEditProfile({
+      ...editProfile,
+      [key]: updatedArray,
     });
   };
 
@@ -64,7 +94,7 @@ const UserProfile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white text-gray-800 p-6">
+    <div className="min-h-screen bg-white text-gray-800 p-6 relative">
       {userData && userData.profile && (
         <>
           {/* Profile Header */}
@@ -77,23 +107,6 @@ const UserProfile = () => {
             <h2 className="text-3xl font-bold text-gray-900">{userData.profile.name}</h2>
             <p className="text-gray-600">{userData.profile.company}</p>
             <p className="text-gray-500">{userData.profile.bio}</p>
-          </div>
-
-          {/* Contact Information */}
-          <div className="mb-4">
-            <h3 className="text-xl font-semibold">Contact Information</h3>
-            <p>Emails:</p>
-            <ul>
-              {userData.profile.emails.map((email, index) => (
-                <li key={index}>{email}</li>
-              ))}
-            </ul>
-            <p>Phone:</p>
-            <ul>
-              {userData.profile.phones.map((phone, index) => (
-                <li key={index}>{phone}</li>
-              ))}
-            </ul>
           </div>
 
           {/* Social Links */}
@@ -114,17 +127,36 @@ const UserProfile = () => {
             </div>
           </div>
 
-          {/* Edit Button */}
+          {/* Tabs for Emails and Phones */}
+          <Tabs defaultActiveKey="1">
+            <TabPane tab="Emails" key="1">
+              <ul>
+                {userData.profile.emails.map((email, index) => (
+                  <li key={index}>{email}</li>
+                ))}
+              </ul>
+            </TabPane>
+            <TabPane tab="Phones" key="2">
+              <ul>
+                {userData.profile.phones.map((phone, index) => (
+                  <li key={index}>{phone}</li>
+                ))}
+              </ul>
+            </TabPane>
+          </Tabs>
+
+          {/* Floating Action Button */}
           <Button
             type="primary"
-            icon={<EditOutlined />}
+            shape="circle"
+            icon={<EditOutlined style={{ color: '#343A40' }} />}
             onClick={() => {
               setEditProfile(userData.profile); // Load existing profile data into the edit form
               toggleDrawer();
             }}
-          >
-            Edit Profile
-          </Button>
+            className="fixed bottom-6 right-6 bg-white shadow-lg"
+            size="large"
+          />
 
           {/* Drawer for Editing Profile */}
           <Drawer
@@ -136,6 +168,7 @@ const UserProfile = () => {
           >
             {/* Name */}
             <div className="mb-4">
+              <label className="block mb-1">Name</label>
               <Input
                 placeholder="Name"
                 value={editProfile.name}
@@ -145,6 +178,7 @@ const UserProfile = () => {
 
             {/* Company */}
             <div className="mb-4">
+              <label className="block mb-1">Company</label>
               <Input
                 placeholder="Company"
                 value={editProfile.company}
@@ -154,6 +188,7 @@ const UserProfile = () => {
 
             {/* Bio */}
             <div className="mb-4">
+              <label className="block mb-1">Bio</label>
               <Input.TextArea
                 placeholder="Bio"
                 value={editProfile.bio}
@@ -163,29 +198,95 @@ const UserProfile = () => {
 
             {/* Emails */}
             <div className="mb-4">
-              <Input.TextArea
-                placeholder="Emails (comma separated)"
-                value={editProfile.emails.join(', ')}
-                onChange={(e) => handleEditChange('emails', e.target.value.split(',').map((email) => email.trim()))}
-              />
+              <label className="block mb-1">Emails</label>
+              {editProfile.emails.map((email, index) => (
+                <Space key={index} className="mb-2">
+                  <Input
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => {
+                      const updatedEmails = [...editProfile.emails];
+                      updatedEmails[index] = e.target.value;
+                      setEditProfile({ ...editProfile, emails: updatedEmails });
+                    }}
+                  />
+                  <Button
+                    type="danger"
+                    icon={<MinusOutlined />}
+                    onClick={() => removeField('emails', index)}
+                  />
+                </Space>
+              ))}
+              <Button
+                type="dashed"
+                onClick={() => addField('emails')}
+                icon={<PlusOutlined />}
+                disabled={editProfile.emails.length >= 5}
+              >
+                Add Email
+              </Button>
             </div>
 
             {/* Phones */}
             <div className="mb-4">
-              <Input.TextArea
-                placeholder="Phones (comma separated)"
-                value={editProfile.phones.join(', ')}
-                onChange={(e) => handleEditChange('phones', e.target.value.split(',').map((phone) => phone.trim()))}
-              />
+              <label className="block mb-1">Phones</label>
+              {editProfile.phones.map((phone, index) => (
+                <Space key={index} className="mb-2">
+                  <Input
+                    placeholder="Phone"
+                    value={phone}
+                    onChange={(e) => {
+                      const updatedPhones = [...editProfile.phones];
+                      updatedPhones[index] = e.target.value;
+                      setEditProfile({ ...editProfile, phones: updatedPhones });
+                    }}
+                  />
+                  <Button
+                    type="danger"
+                    icon={<MinusOutlined />}
+                    onClick={() => removeField('phones', index)}
+                  />
+                </Space>
+              ))}
+              <Button
+                type="dashed"
+                onClick={() => addField('phones')}
+                icon={<PlusOutlined />}
+                disabled={editProfile.phones.length >= 5}
+              >
+                Add Phone
+              </Button>
             </div>
 
             {/* Social Links */}
             <div className="mb-4">
-              <Input.TextArea
-                placeholder="Social Links (comma separated)"
-                value={editProfile.socials.join(', ')}
-                onChange={(e) => handleEditChange('socials', e.target.value.split(',').map((link) => link.trim()))}
-              />
+              <label className="block mb-1">Social Links</label>
+              {editProfile.socials.map((social, index) => (
+                <Space key={index} className="mb-2">
+                  <Input
+                    placeholder="Social Link"
+                    value={social}
+                    onChange={(e) => {
+                      const updatedSocials = [...editProfile.socials];
+                      updatedSocials[index] = e.target.value;
+                      setEditProfile({ ...editProfile, socials: updatedSocials });
+                    }}
+                  />
+                  <Button
+                    type="danger"
+                    icon={<MinusOutlined />}
+                    onClick={() => removeField('socials', index)}
+                  />
+                </Space>
+              ))}
+              <Button
+                type="dashed"
+                onClick={() => addField('socials')}
+                icon={<PlusOutlined />}
+                disabled={editProfile.socials.length >= 10}
+              >
+                Add Social Link
+              </Button>
             </div>
 
             {/* Save Button */}
