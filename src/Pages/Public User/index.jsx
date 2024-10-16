@@ -1,176 +1,153 @@
-import React, { useEffect, useState } from 'react';
-import {
-  Card,
-  Typography,
-  List,
-  Space,
-  Drawer,
-  Button,
-  Form,
-  Input,
-  message,
-  Tabs,
-  FloatButton,
-  Divider,
-} from 'antd';
-import { EditFilled, MailOutlined, PhoneOutlined } from '@ant-design/icons';
-import { getPublicProfile, updateUser } from '../../Function/Profile';
-import { fetchUser } from '../../Function/Authentication';
+import React, { useState, useEffect } from 'react';
+import { Button, Tabs, Card } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import { getPublicProfile } from '../../Function/Profile';
 import getSocialIcon from '../../Misc/Social Icons';
-import { root } from '../..';
-import NotFound from '../../Misc/Not Found';
-import Loading from '../../Misc/Loading';
-import Logo from '../../Misc/Logo';
+import 'tailwindcss/tailwind.css';
 
-const { Title, Text } = Typography;
+const { TabPane } = Tabs;
 
 const PublicUser = () => {
-  const [form] = Form.useForm();
-  const [loaded, setLoaded] = useState(false)
-  const [userData, setUserData] = useState({
-    name: '',
-    email: '',
-    profile: {
-      phones: Array(0).fill(''), // Initialize with 5 empty phone fields
-      emails: Array(0).fill(''), // Initialize with 5 empty email fields
-      socials: Array(0).fill(''), // Initialize with 10 empty social fields
-      company: '',
-      bio: '',
-      experience: Array(0).fill({ role: '', company: '', duration: '' }), // Initialize with 10 empty experience objects
-      education: Array(0).fill({ degree: '', institution: '', year: '' }), // Initialize with 5 empty education objects
-    },
-  });
+  const [userData, setUserData] = useState(null);
+  const [loaded, setLoaded] = useState(false);
 
-  // Fetch user data on component mount
   useEffect(() => {
-    let t = window.location.pathname.split("/")
-    const userId = t[1].replaceAll("%20", '')
-    getPublicProfile(userId).then((data) => {
-      const defaultData = {
-        profile: data,
-      };
-      setUserData(defaultData);
-      setLoaded(true)
-    }).catch((e)=>{
-      root.render(<NotFound/>)
-    });
-  }, [form]);
+    let t = window.location.pathname.split('/');
+    const userId = t[1].replaceAll('%20', '');
+    getPublicProfile(userId)
+      .then((data) => {
+        const defaultData = {
+          profile: data,
+        };
+        setUserData(defaultData);
+        setLoaded(true);
+      })
+      .catch((e) => {
+        console.error('Profile not found');
+      });
+  }, []);
 
-  if (!userData) {
+  if (!loaded || !userData) {
     return <p>Loading...</p>;
   }
 
-  const tabItems = [
-    {
-      key: '1',
-      label: 'Phone Numbers',
-      children: userData.profile.phones && userData.profile.phones.length > 0 ? (
-        userData.profile.phones.map((phone, index) => (
-          <div key={index} className="flex items-center">
-            <PhoneOutlined className="mr-2 text-green-500" />
-            <a href={`tel:${phone}`}>{phone}</a>
-          </div>
-        ))
-      ) : (
-        <p>No phone numbers available</p>
-      ),
-    },
-    {
-      key: '2',
-      label: 'Emails',
-      children: userData.profile.emails && userData.profile.emails.length > 0 ? (
-        userData.profile.emails.map((email, index) => (
-          <div key={index} className="flex items-center">
-            <MailOutlined className="mr-2 text-blue-500" />
-            <a href={`mailto:${email}`} className="text-blue-600">
-              {email}
-            </a>
-          </div>
-        ))
-      ) : (
-        <p>No emails available</p>
-      ),
-    },
-  ];
+  const handleSaveContact = () => {
+    const { profile } = userData;
+    const contact = `
+      BEGIN:VCARD
+      VERSION:3.0
+      N:${profile.name}
+      ORG:${profile.company}
+      EMAIL:${profile.emails[0]}
+      TEL:${profile.phones[0]}
+      NOTE:${profile.bio}
+      URL:${profile.socials.join(',')}
+      END:VCARD
+    `;
+    const blob = new Blob([contact], { type: 'text/vcard' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${profile.name}_contact.vcf`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
 
   return (
-    <>
-    {
-      !loaded ? <Loading/> : <div className="profile-container w-full md:w-2/5 mx-auto ">
-       <div className='m-2'>
-       <Logo/>
-       </div>
-      <Card className="user-profile-card">
-        <div className="flex flex-col justify-center">
-          <div className=" flex flex-col md:flex-row space-y-3 md:space-y-0 rounded-xl shadow-lg w-full md:max-w-3xl mx-auto border border-white bg-white">
-            <div className="w-full md:w-1/3 bg-white grid place-items-center">
+    <div className="min-h-screen bg-white text-gray-800 p-1 relative">
+      {userData && userData.profile && (
+        <Card className="shadow-md p-1">
+          {/* Profile Info Card */}
+          <Card className="shadow-lg mb-6">
+            <div className="flex flex-col items-center mb-6">
               <img
                 src={userData.profile.image}
-                alt="User Image"
-                className="rounded-full w-32"
+                alt="Profile"
+                className="rounded-full w-40 h-40 mb-4"
               />
-            </div>
-            <div className="w-full md:w-2/3 bg-white flex flex-col space-y-2 p-3">
-              <h2 className="flex mx-auto font-black text-gray-800 md:text-3xl text-xl">
-                {userData.profile.name} <span><svg className='ml-2' xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24" height="24" viewBox="0 0 48 48">
-<circle cx="24" cy="24" r="20" fill="#4dd0e1"></circle><path fill="#fff" d="M22.491,30.69c-0.576,0-1.152-0.22-1.591-0.659l-6.083-6.084c-0.879-0.878-0.879-2.303,0-3.182 c0.878-0.879,2.304-0.879,3.182,0l6.083,6.084c0.879,0.878,0.879,2.303,0,3.182C23.643,30.47,23.067,30.69,22.491,30.69z"></path><path fill="#fff" d="M22.491,30.69c-0.576,0-1.152-0.22-1.591-0.659c-0.879-0.878-0.879-2.303,0-3.182l9.539-9.539 c0.878-0.879,2.304-0.879,3.182,0c0.879,0.878,0.879,2.303,0,3.182l-9.539,9.539C23.643,30.47,23.067,30.69,22.491,30.69z"></path>
-</svg></span>
+              <h2 className="text-2xl font-bold text-gray-900">
+                {userData.profile.name}
+                <span className="ml-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    x="0px"
+                    y="0px"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 48 48"
+                  >
+                    <circle cx="24" cy="24" r="20" fill="#4dd0e1"></circle>
+                    <path
+                      fill="#fff"
+                      d="M22.491,30.69c-0.576,0-1.152-0.22-1.591-0.659l-6.083-6.084c-0.879-0.878-0.879-2.303,0-3.182
+                      c0.878-0.879,2.304-0.879,3.182,0l6.083,6.084c0.879,0.878,0.879,2.303,0,3.182C23.643,30.47,23.067,30.69,22.491,30.69z"
+                    ></path>
+                    <path
+                      fill="#fff"
+                      d="M22.491,30.69c-0.576,0-1.152-0.22-1.591-0.659c-0.879-0.878-0.879-2.303,0-3.182l9.539-9.539
+                      c0.878-0.879,2.304-0.879,3.182,0c0.879,0.878,0.879,2.303,0,3.182l-9.539,9.539C23.643,30.47,23.067,30.69,22.491,30.69z"
+                    ></path>
+                  </svg>
+                </span>
               </h2>
-              <Text>{userData.email}</Text>
-              <Text className="block text-gray-500">Company: {userData.profile.company}</Text>
-              <p className="md:text-lg text-gray-500 text-base">{userData.profile.bio}</p>
-              <center>
-                <Space size="small">
-                  {userData.profile.socials.length > 0 ? (
-                    userData.profile.socials.map((social, index) => (
-                      <a
-                        href={social}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        key={index}
-                        className="text-xl"
-                      >
-                        {getSocialIcon(social)}
-                      </a>
-                    ))
-                  ) : (
-                    <p>No social links available</p>
-                  )}
-                </Space>
-              </center>
+              <p className="text-gray-600">{userData.profile.company}</p>
+              <p className="text-gray-500">{userData.profile.bio}</p>
             </div>
-          </div>
-        </div>
-        <Tabs defaultActiveKey="1" items={tabItems} /><br></br>
- <br></br>       <ProfileDetailsSection title="Experience" data={userData.profile.experience} /><br></br>
- <br></br>       <ProfileDetailsSection title="Education" data={userData.profile.education} />
-      </Card>
-    
-    </div>
 
-    }
-    </>
+            {/* Social Links */}
+            <div className="mb-6">
+              <h3 className="text-xl font-semibold">Social Links</h3>
+              <div className="flex space-x-4">
+                {userData.profile.socials.map((social, index) => (
+                  <a
+                    key={index}
+                    href={social}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-700 hover:text-gray-900"
+                  >
+                    {getSocialIcon(social)}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </Card>
+
+          {/* Tabs for Emails and Phones */}
+          <Tabs defaultActiveKey="1">
+            <TabPane tab="Emails" key="1">
+              <ul className="text-left">
+                {userData.profile.emails.map((email, index) => (
+                  <li key={index}>
+                    <a href={`mailto:${email}`}>{email}</a>
+                  </li>
+                ))}
+              </ul>
+            </TabPane>
+            <TabPane tab="Phones" key="2">
+              <ul className="text-left">
+                {userData.profile.phones.map((phone, index) => (
+                  <li key={index}>
+                    <a href={`tel:${phone}`}>{phone}</a>
+                  </li>
+                ))}
+              </ul>
+            </TabPane>
+          </Tabs>
+
+          {/* Floating Action Button */}
+          <Button
+            type="primary"
+            shape="circle"
+            icon={<PlusOutlined />}
+            onClick={handleSaveContact}
+            className="fixed bottom-6 right-6 bg-white shadow-lg"
+            size="large"
+          />
+        </Card>
+      )}
+    </div>
   );
 };
-
-
-const ProfileDetailsSection = ({ title, data }) => (
-  <div className="profile-section">
-    <Title level={4}>{title}</Title>
-    {data && data.length > 0 ? (
-      <List
-        bordered
-        dataSource={data}
-        renderItem={(item) => (
-          <List.Item>
-            <Text strong>{item.role || item.degree}</Text> at <Text>{item.company || item.institution}</Text> ({item.duration || item.year})
-          </List.Item>
-        )}
-      />
-    ) : (
-      <p>No {title.toLowerCase()} available</p>
-    )}
-  </div>
-);
 
 export default PublicUser;

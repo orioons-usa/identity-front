@@ -96,7 +96,7 @@ const UserProfile = () => {
   return (
     <div className="min-h-screen bg-white text-gray-800 p-1 relative">
       {userData && userData.profile && (
-        <Card className="shadow-md p-1">
+        <Card className="shadow-md">
           {/* Profile Info Card */}
           <Card className="shadow-lg mb-6">
             <div className="flex flex-col items-center mb-6">
@@ -138,14 +138,14 @@ const UserProfile = () => {
             <TabPane tab="Emails" key="1">
               <ul className='text-left'>
                 {userData.profile.emails.map((email, index) => (
-                  <li key={index}>{email}</li>
+                  <li key={index}><a href={`mailto:${email}`}>{email}</a></li>
                 ))}
               </ul>
             </TabPane>
             <TabPane tab="Phones" key="2">
             <ul className='text-left'>
                 {userData.profile.phones.map((phone, index) => (
-                  <li key={index}>{phone}</li>
+                  <li key={index}><a href={`tel:{phone}`}>{phone}</a></li>
                 ))}
               </ul>
             </TabPane>
