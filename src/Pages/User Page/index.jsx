@@ -264,8 +264,6 @@ const UserProfile = () => {
         <ProfileDetailsSection title="Experience" data={userData.profile.experience} />
         <ProfileDetailsSection title="Education" data={userData.profile.education} />
       </Card>
-      <Divider />
-      <p className="text-center text-gray-500">INTREDIA IDENTITY</p>
     </div>
   );
 };

@@ -145,8 +145,7 @@ const PublicUser = () => {
  <br></br>       <ProfileDetailsSection title="Experience" data={userData.profile.experience} /><br></br>
  <br></br>       <ProfileDetailsSection title="Education" data={userData.profile.education} />
       </Card>
-      <Divider />
-      <p className="text-center text-gray-500">INTREDIA IDENTITY</p>
+    
     </div>
 
     }
