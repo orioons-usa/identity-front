@@ -31,38 +31,64 @@ const PublicUser = () => {
     return <p>Loading...</p>;
   }
 
-  
-
-
   const handleSaveContact = () => {
     const { profile } = userData;
   
-    // Create the vCard content
-    const vcard = `
+    // vCard content
+    const contact = `
       BEGIN:VCARD
       VERSION:3.0
-      FN:${profile.name}
+      N:${profile.name}
       ORG:${profile.company}
       EMAIL:${profile.emails[0]}
       TEL:${profile.phones[0]}
       NOTE:${profile.bio}
-      URL:${profile.socials[0]}
+      URL:${profile.socials.join(',')}
       END:VCARD
-    `.trim(); // Trim whitespace for cleaner formatting
+    `;
   
-    // Encode vCard content to create a data URL
-    const vCardDataUrl = `data:text/vcard;charset=utf-8,${encodeURIComponent(vcard)}`;
+    // Create a blob with the vCard content and proper MIME type
+    const blob = new Blob([contact], { type: 'text/vcard' });
   
-    // Create a temporary anchor element
-    const a = document.createElement('a');
-    a.href = vCardDataUrl;
-    a.download = `${profile.name}.vcf`; // Set filename
-    document.body.appendChild(a);
-    a.click(); // Trigger the download
-    document.body.removeChild(a); // Clean up
+    // Check for iOS Safari
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  
+    if (isSafari) {
+      // For Safari (iOS), use a data URI for download
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const a = document.createElement('a');
+        a.href = reader.result;
+        a.download = `${profile.name}_contact.vcf`;
+        a.style.display = 'none'; // Hide the anchor tag
+  
+        a.addEventListener('click', () => {
+          // User interaction triggers download
+        });
+  
+        document.body.appendChild(a);
+        a.click(); // Simulate a user click
+        document.body.removeChild(a);
+      };
+      reader.readAsDataURL(blob);
+    } else {
+      // For other browsers, use Object URL
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${profile.name}_contact.vcf`;
+      a.style.display = 'none'; // Hide the anchor tag
+  
+      a.addEventListener('click', () => {
+        // User interaction triggers download
+      });
+  
+      document.body.appendChild(a);
+      a.click(); // Simulate a user click
+      window.URL.revokeObjectURL(url); // Release the object URL after download
+      document.body.removeChild(a);
+    }
   };
-  
-
   return (
     <div className="min-h-screen bg-white mx-auto w-full md:w-2/6 text-gray-800 p-1 relative">
       {userData && userData.profile && (
