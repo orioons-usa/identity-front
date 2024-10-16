@@ -64,7 +64,7 @@ return(<>
                       registerUser(name, email, password, id).then((e)=>{
                         message.success("Account Created Successfully")
                         window.localStorage.setItem("_tex", e.token)
-                        subscribeUser(email, name).then((e)=>{
+                        subscribeUser(email, name, e.token).then((e)=>{
                           window.location = `./activate/${email}`
                         }).catch((e)=>{
                           message.error("Error Creating Subscription")

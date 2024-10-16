@@ -36,9 +36,13 @@ export const registerUser = (name, email, password, id) => {
      })
  }
  
-export const subscribeUser = (email, name) => {
+export const subscribeUser = (email, name, token) => {
     return new Promise((res, rej)=>{
-        axios.post("https://api.id.intredia.com/api/auth/subscribe", {name, email}).then((e)=>{
+        axios.post("https://api.id.intredia.com/api/auth/subscribe", {name, email}, {
+            headers:{
+                "x-auth-token": token
+            }
+        }).then((e)=>{
             res(e.data)
         }).catch((e)=>{
             rej(e)
