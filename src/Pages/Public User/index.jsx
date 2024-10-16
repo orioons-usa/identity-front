@@ -103,9 +103,9 @@ const PublicUser = () => {
       {userData && userData.profile && (
         <Card className="shadow-md ">
           {/* Profile Info Card */}
-          <Card className="shadow-lg mb-6">
+          <div  className="shadow-lg p-2 rounded border mb-6"> 
           <Logo/>
-            <div className="flex flex-col items-center mb-6">
+            <div className="flex mt-3 flex-col items-center mb-6">
               <img
                 src={userData.profile.image}
                 alt="Profile"
@@ -149,7 +149,7 @@ const PublicUser = () => {
            
             </div>
 
-          </Card>
+          </div>
 
           {/* Tabs for Emails and Phones */}
           <Tabs defaultActiveKey="1">
