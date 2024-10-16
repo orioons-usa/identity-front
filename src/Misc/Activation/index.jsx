@@ -43,6 +43,10 @@ const ActivationPage = () => {
                 
       })
 
+setInterval((e)=>{
+  console.log(paymentUrl)
+}, 1000)
+
 return(<>
         <style
           dangerouslySetInnerHTML={{
