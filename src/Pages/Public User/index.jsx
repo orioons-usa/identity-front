@@ -5,6 +5,7 @@ import { getPublicProfile } from '../../Function/Profile';
 import getSocialIcon from '../../Misc/Social Icons';
 import 'tailwindcss/tailwind.css';
 import Loading from '../../Misc/Loading';
+import Logo from '../../Misc/Logo';
 
 const { TabPane } = Tabs;
 
@@ -101,6 +102,7 @@ const PublicUser = () => {
     <div className="min-h-screen bg-white mx-auto w-full md:w-2/6 text-gray-800 p-1 relative">
       {userData && userData.profile && (
         <Card className="shadow-md ">
+          <Logo/>
           {/* Profile Info Card */}
           <Card className="shadow-lg mb-6">
             <div className="flex flex-col items-center mb-6">
@@ -154,7 +156,7 @@ const PublicUser = () => {
             <TabPane tab="Emails" key="1">
               <ul className="text-left">
                 {userData.profile.emails.map((email, index) => (
-                  <li className='w-full my-2 bordered border-[1px]-gray rounded-lg px-3 py-2 flex ' key={index}>
+                  <li className='w-full my-2 bordered border border-slate-600  rounded-lg px-3 py-2 flex ' key={index}>
                     <MailFilled/> <a className='ml-2' href={`mailto:${email}`}>{email}</a>
                   </li>
                 ))}
@@ -163,7 +165,7 @@ const PublicUser = () => {
             <TabPane tab="Phones" key="2">
               <ul className="text-left">
                 {userData.profile.phones.map((phone, index) => (
-                  <li className='w-full my-2 bordered border-[1px]-gray rounded-lg px-3 py-2 flex ' key={index}>
+                  <li className='w-full my-2 bordered border border-slate-600 rounded-lg px-3 py-2 flex ' key={index}>
                    <PhoneFilled/> <a className='ml-2' href={`tel:${phone}`}>{phone}</a>
                   </li>
                 ))}
