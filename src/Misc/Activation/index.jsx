@@ -31,7 +31,7 @@ const ActivationPage = () => {
                     window.location = "./"
                   }).catch((e)=>{
                     setPaymentUrl(e.link)
-                    setSD(true)
+                    setSD(false)
                   })
                }else{
                   setErrorMes(true)
