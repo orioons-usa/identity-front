@@ -116,7 +116,6 @@ const UserProfile = () => {
 
             {/* Social Links */}
             <div className="mb-6">
-              <h3 className="text-xl font-semibold mb-4">Social Links</h3>
              <center>
              <div className="flex space-x-4">
                 {userData.profile.socials.map((social, index) => (
