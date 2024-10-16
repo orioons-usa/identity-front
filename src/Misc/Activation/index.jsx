@@ -71,7 +71,6 @@ return(<>
             <div className="flex flex-1  flex-col md:flex justify-center space-y-5 max-w-md">
            
               <div className="flex flex-col space-y-2 text-center">
-                
                 <h2 className="text-3xl md:text-4xl font-bold">
                 Subscribe to Start
                 </h2>
@@ -87,7 +86,9 @@ return(<>
                    
                 }}> 
 
-              <center>  <h1 className="text-4xl"><span className="text-xl">$</span>39.99<span className="text-xl">/Month</span></h1>
+              <center>  
+                <h1 className="text-4xl"><span className="text-xl">$</span>39.99<span className="text-xl">/Year</span></h1>
+                <span className="text-sm ml-16">$3.33/Month</span>
               </center>
             
                 <button  type="submit" onClick={(e)=>{
