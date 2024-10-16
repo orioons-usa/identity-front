@@ -94,9 +94,9 @@ const UserProfile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white text-gray-800 p-6 relative">
+    <div className="min-h-screen bg-white text-gray-800 p-1 relative">
       {userData && userData.profile && (
-        <Card className="shadow-md p-6">
+        <Card className="shadow-md p-1">
           {/* Profile Info Card */}
           <Card className="shadow-lg mb-6">
             <div className="flex flex-col items-center mb-6">
@@ -113,7 +113,8 @@ const UserProfile = () => {
             {/* Social Links */}
             <div className="mb-6">
               <h3 className="text-xl font-semibold">Social Links</h3>
-              <div className="flex space-x-4">
+             <center>
+             <div className="flex space-x-4">
                 {userData.profile.socials.map((social, index) => (
                   <a
                     key={index}
@@ -126,20 +127,21 @@ const UserProfile = () => {
                   </a>
                 ))}
               </div>
+             </center>
             </div>
           </Card>
 
           {/* Tabs for Emails and Phones */}
           <Tabs defaultActiveKey="1">
             <TabPane tab="Emails" key="1">
-              <ul>
+              <ul className='text-left'>
                 {userData.profile.emails.map((email, index) => (
                   <li key={index}>{email}</li>
                 ))}
               </ul>
             </TabPane>
             <TabPane tab="Phones" key="2">
-              <ul>
+            <ul className='text-left'>
                 {userData.profile.phones.map((phone, index) => (
                   <li key={index}>{phone}</li>
                 ))}
