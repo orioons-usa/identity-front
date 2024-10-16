@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Tabs, Card } from 'antd';
+import { Button, Tabs, Card, Divider } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { getPublicProfile } from '../../Function/Profile';
 import getSocialIcon from '../../Misc/Social Icons';
@@ -113,6 +113,11 @@ const PublicUser = () => {
                 ))}
               </div>
             </div>
+            <Divider></Divider>
+            <button onClick={handleSaveContact} className={`flex items-center justify-center flex-none px-3 py-2 md:px-4 md:py-3 border-2 rounded-lg font-medium border-black bg-black text-white`}>
+                 <PlusOutlined /> <span className='ml-2'>ADD TO CONTACT</span>
+                </button>
+
           </Card>
 
           {/* Tabs for Emails and Phones */}
@@ -138,14 +143,7 @@ const PublicUser = () => {
           </Tabs>
 
           {/* Floating Action Button */}
-          <Button
-            type="primary"
-            shape="circle"
-            icon={<PlusOutlined />}
-            onClick={handleSaveContact}
-            className="fixed bottom-6 right-6 bg-white shadow-lg"
-            size="large"
-          />
+         
         </Card>
       )}
     </div>
