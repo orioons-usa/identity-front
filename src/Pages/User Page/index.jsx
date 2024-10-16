@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Drawer, Button, Input, message, Tabs, Space } from 'antd';
+import { Drawer, Button, Input, message, Tabs, Space, Card } from 'antd';
 import { EditOutlined, PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import { updateUser } from '../../Function/Profile';
 import { fetchUser } from '../../Function/Authentication';
@@ -96,36 +96,38 @@ const UserProfile = () => {
   return (
     <div className="min-h-screen bg-white text-gray-800 p-6 relative">
       {userData && userData.profile && (
-        <>
-          {/* Profile Header */}
-          <div className="flex flex-col items-center mb-6">
-            <img
-              src={userData.profile.image}
-              alt="Profile"
-              className="rounded-full w-40 h-40 mb-4"
-            />
-            <h2 className="text-3xl font-bold text-gray-900">{userData.profile.name}</h2>
-            <p className="text-gray-600">{userData.profile.company}</p>
-            <p className="text-gray-500">{userData.profile.bio}</p>
-          </div>
-
-          {/* Social Links */}
-          <div className="mb-6">
-            <h3 className="text-xl font-semibold">Social Links</h3>
-            <div className="flex space-x-4">
-              {userData.profile.socials.map((social, index) => (
-                <a
-                  key={index}
-                  href={social}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-700 hover:text-gray-900"
-                >
-                  {getSocialIcon(social)}
-                </a>
-              ))}
+        <Card className="shadow-md p-6">
+          {/* Profile Info Card */}
+          <Card className="shadow-lg mb-6">
+            <div className="flex flex-col items-center mb-6">
+              <img
+                src={userData.profile.image}
+                alt="Profile"
+                className="rounded-full w-40 h-40 mb-4"
+              />
+              <h2 className="text-3xl font-bold text-gray-900">{userData.profile.name}</h2>
+              <p className="text-gray-600">{userData.profile.company}</p>
+              <p className="text-gray-500">{userData.profile.bio}</p>
             </div>
-          </div>
+
+            {/* Social Links */}
+            <div className="mb-6">
+              <h3 className="text-xl font-semibold">Social Links</h3>
+              <div className="flex space-x-4">
+                {userData.profile.socials.map((social, index) => (
+                  <a
+                    key={index}
+                    href={social}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-700 hover:text-gray-900"
+                  >
+                    {getSocialIcon(social)}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </Card>
 
           {/* Tabs for Emails and Phones */}
           <Tabs defaultActiveKey="1">
@@ -294,7 +296,7 @@ const UserProfile = () => {
               Save Changes
             </Button>
           </Drawer>
-        </>
+        </Card>
       )}
     </div>
   );
