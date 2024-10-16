@@ -3,7 +3,7 @@ import { Drawer, Button, Input, message } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import { updateUser } from '../../Function/Profile';
 import { fetchUser } from '../../Function/Authentication';
-import getSocialIcon from '../../Misc/SocialIcons'; // Assuming this fetches icons for social links
+import getSocialIcon from '../../Misc/Social Icons';
 import 'tailwindcss/tailwind.css'; // Ensure Tailwind is loaded
 
 const UserProfile = () => {
