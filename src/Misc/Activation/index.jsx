@@ -8,7 +8,7 @@ import { checkPaymentStatus } from "../../Function/Authentication"
 const ActivationPage = () => {
       const [email, setEmail] = useState("")
       const [sd, setSD] = useState(false)
-      const [ paymentUrl, setPaymentUrl] = useState({})
+      const [ paymentUrl, setPaymentUrl] = useState("")
       const [ errorMes, setErrorMes] = useState(false)
 
       const qr = [
@@ -30,9 +30,9 @@ const ActivationPage = () => {
                   setEmail(_o)
                   checkPaymentStatus(email).then((e)=>{
                     window.location = "./"
-                  }).catch((e)=>{
-                    if(typeof(e.response.data.link) === String && e.response.data.link !== null && e.response.data.link !== undefined){
-                      setPaymentUrl(e)
+                  }).catch((ek)=>{
+                    if(typeof(ek.response.data.link) === String && ek.response.data.link !== null && ek.response.data.link !== undefined){
+                      setPaymentUrl(ek.response.data.link)
                       console.log(paymentUrl)
                     }
                     setSD(true)
