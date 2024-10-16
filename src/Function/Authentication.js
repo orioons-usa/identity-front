@@ -53,7 +53,7 @@ export const subscribeUser = (email, name, token) => {
 }
 export const checkPaymentStatus = (email, session_id) => {
     return new Promise((res, rej)=>{
-        axios.post(`https://api.id.intredia.com/api/auth/payment/success/${email}?session_id=${session_id}`).then((e)=>{
+        axios.post(`https://api.id.intredia.com/api/auth/payment/success/${email}`).then((e)=>{
             res(e.data)
         }).catch((e)=>{
             rej(e)
