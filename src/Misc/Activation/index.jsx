@@ -31,7 +31,7 @@ const ActivationPage = () => {
                     window.location = "./"
                   }).catch((e)=>{
                     setPaymentUrl(e.link)
-                    setSD(false)
+                    setSD(true)
                   })
                }else{
                   setErrorMes(true)
@@ -94,7 +94,7 @@ return(<>
                 <button  type="submit" onClick={(e)=>{
                   window.location = paymentUrl
                 }}
-                disabled={!sd} className={`flex items-center justify-center flex-none px-3 py-2 md:px-4 md:py-3 border-2 rounded-lg font-medium ${sd ? "border-gray-500 bg-gray-500" : "border-black bg-black"} text-white`}>
+                disabled={!sd} className={`flex items-center justify-center flex-none px-3 py-2 md:px-4 md:py-3 border-2 rounded-lg font-medium ${!sd ? "border-gray-500 bg-gray-500" : "border-black bg-black"} text-white`}>
                   SUBSCRIBE
                 </button>
 
