@@ -135,13 +135,13 @@ const PublicUser = () => {
             <Divider></Divider>
             <div className="flex">
 
-            <button onClick={handleSaveContact} className={`flex mx-1 items-center justify-center flex-none px-3 py-2 md:px-4 md:py-3 border-2 rounded-lg font-medium border-black bg-black text-white`}>
+            <button onClick={handleSaveContact} className={`flex mr-1 items-center justify-center flex-none px-3 py-2 md:px-4 md:py-3 border-2 rounded-lg font-medium border-black bg-black text-white`}>
                  <PlusOutlined /> <span className='ml-2'>ADD TO CONTACT</span>
                 </button>
            
 
-            <button onClick={shareCurrentURL} className={`flex  mx-1items-center justify-center flex-none px-3 py-2 md:px-4 md:py-3 border-2 rounded-lg font-medium border-black bg-black text-white`}>
-                 <SendOutlined /> <span className='ml-2'></span>
+            <button onClick={shareCurrentURL} className={`flex w-full ml-1 items-center justify-center flex-none px-3 py-2 md:px-4 md:py-3 border-2 rounded-lg font-medium border-black bg-black text-white`}>
+                 <SendOutlined /> <span className='ml-2'>SHARE</span>
                 </button>
            
             </div>
