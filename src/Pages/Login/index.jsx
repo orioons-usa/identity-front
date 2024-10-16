@@ -4,6 +4,7 @@ import statePush from "../../Misc/StatePush"
 import { root } from "../.."
 import { useState } from "react"
 import { LoginUser, registerUser } from "../../Function/Authentication"
+import Logo from "../../Misc/Logo"
 
 const LoginPage = () => {
       const [email, setEmail] = useState("")
@@ -23,12 +24,7 @@ return(<>
           <div className="flex flex-row w-full">
             {/* Sidebar */}
             <div className="hidden lg:flex flex-col justify-between bg-[#ffe85c] lg:p-8 xl:p-12 lg:max-w-sm xl:max-w-lg">
-              <div className="flex items-center justify-start space-x-3">
-                <span className="bg-black rounded-full w-8 h-8" />
-                <a href="#" className="font-medium text-xl">
-                  Intredia Identity
-                </a>
-              </div>
+            <Logo/>
               <div className="space-y-5">
                 <h1 className="lg:text-3xl xl:text-5xl xl:leading-snug font-extrabold">
                   Identity For 21st Century
@@ -46,12 +42,7 @@ return(<>
             {/* Login */}
             <div className="flex flex-1 flex-col items-center justify-center px-10 relative">
               <div className="flex lg:hidden justify-between items-center w-full py-4">
-                <div className="flex items-center justify-start space-x-3">
-                  <span className="bg-black rounded-full w-6 h-6" />
-                  <a href="#" className="font-medium text-lg">
-                    Intredia Identity
-                  </a>
-                </div>
+              <Logo/>
                 
               </div>
               {/* Login box */}

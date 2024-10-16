@@ -1,10 +1,8 @@
-import logo from './logo.svg';
 import './App.css';
 import LoginPage from './Pages/Login';
 import { useState, useEffect } from 'react';
 import Loading from './Misc/Loading';
 import NotFound from './Misc/Not Found';
-import { root } from '.';
 import RegisterPage from './Pages/Register';
 import { fetchUser } from './Function/Authentication';
 import { message } from 'antd';

@@ -20,7 +20,7 @@ import getSocialIcon from '../../Misc/Social Icons';
 import { root } from '../..';
 import NotFound from '../../Misc/Not Found';
 import Loading from '../../Misc/Loading';
-import Logo from '../Logo';
+import Logo from '../../Misc/Logo';
 
 const { Title, Text } = Typography;
 
