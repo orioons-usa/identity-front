@@ -16,6 +16,7 @@ const ActivationPage = () => {
         label: "Show Payment QR",
         children:  <center>
         <QRCode value={paymentUrl || '-'} status={sd === false ? "loading" : "active"} />
+        {paymentUrl}
         </center>
        }
       ]
@@ -25,7 +26,7 @@ const ActivationPage = () => {
            _o = window.location.pathname.split("/")
             _o.splice(0,2)
               _o = _o[0]
-               if(emailRegex.test(_o)){
+               if(emailRegex.test(_o) === true){
                   setEmail(_o)
                   checkPaymentStatus(email).then((e)=>{
                     window.location = "./"
