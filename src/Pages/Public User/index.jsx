@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Tabs, Card, Divider } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { MailFilled, PhoneFilled, PlusOutlined, SendOutlined } from '@ant-design/icons';
 import { getPublicProfile } from '../../Function/Profile';
 import getSocialIcon from '../../Misc/Social Icons';
 import 'tailwindcss/tailwind.css';
@@ -35,7 +35,7 @@ const PublicUser = () => {
     const { profile } = userData;
   
     
-    var vcard = "BEGIN:VCARD\nVERSION:4.0\nFN:" + profile.name + "\nTEL;TYPE=work,voice:" + profile.phones[0] + "\nEMAIL:" + profile.emails[0] +"\nURL:" + profile.socials.join(',') + "\nEND:VCARD";
+    var vcard = "BEGIN:VCARD\nVERSION:4.0\nFN:" + profile.name + "\nTEL;TYPE=work,voice:" + profile.phones[0] + "\nEMAIL:" + profile.emails[0] +"\nURL:" + profile.socials[0] + "\nEND:VCARD";
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
   
     if (isSafari) {
@@ -66,6 +66,36 @@ const PublicUser = () => {
       document.body.removeChild(a);
     }
   };
+
+  function shareCurrentURL() {
+    if (navigator.share) {
+      // For browsers that support the native share API
+      navigator.share({
+        text: 'Check out this awesome page:',
+        url: window.location.href
+      })
+        .then(() => {
+          console.log('Share successful');
+        })
+        .catch((error) => {
+          console.error('Error sharing:', error);
+        });
+    } else {
+      const shareText = `Check out this awesome page: ${window.location.href}`;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(shareText)
+          .then(() => {
+            alert('URL copied to clipboard. You can paste it into a messaging app.');
+          })
+          .catch((error) => {
+            console.error('Error copying to clipboard:', error);
+          });
+      } else {
+        alert('Sharing is not supported on this device.');
+      }
+    }
+  }
+
   return (
     <div className="min-h-screen bg-white mx-auto w-full md:w-2/6 text-gray-800 p-1 relative">
       {userData && userData.profile && (
@@ -103,9 +133,18 @@ const PublicUser = () => {
               </div>
             </div>
             <Divider></Divider>
+            <div className="flex">
+
             <button onClick={handleSaveContact} className={`flex items-center justify-center flex-none px-3 py-2 md:px-4 md:py-3 border-2 rounded-lg font-medium border-black bg-black text-white`}>
                  <PlusOutlined /> <span className='ml-2'>ADD TO CONTACT</span>
                 </button>
+           
+
+            <button onClick={shareCurrentURL} className={`flex items-center justify-center flex-none px-3 py-2 md:px-4 md:py-3 border-2 rounded-lg font-medium border-black bg-black text-white`}>
+                 <SendOutlined /> <span className='ml-2'></span>
+                </button>
+           
+            </div>
 
           </Card>
 
@@ -114,8 +153,8 @@ const PublicUser = () => {
             <TabPane tab="Emails" key="1">
               <ul className="text-left">
                 {userData.profile.emails.map((email, index) => (
-                  <li key={index}>
-                    <a href={`mailto:${email}`}>{email}</a>
+                  <li className='w-full my-2 rounded-lg px-3 py-2 flex ' key={index}>
+                    <PhoneFilled/> <a className='ml-2' href={`mailto:${email}`}>{email}</a>
                   </li>
                 ))}
               </ul>
@@ -123,8 +162,8 @@ const PublicUser = () => {
             <TabPane tab="Phones" key="2">
               <ul className="text-left">
                 {userData.profile.phones.map((phone, index) => (
-                  <li key={index}>
-                    <a href={`tel:${phone}`}>{phone}</a>
+                  <li className='w-full my-2 rounded-lg px-3 py-2 flex ' key={index}>
+                   <MailFilled/> <a className='ml-2' href={`tel:${phone}`}>{phone}</a>
                   </li>
                 ))}
               </ul>
