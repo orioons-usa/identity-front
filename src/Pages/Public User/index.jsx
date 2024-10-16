@@ -43,8 +43,8 @@ const PublicUser = () => {
   var url = URL.createObjectURL(blob);
   
   const newLink = document.createElement('a');
-  newLink.download = contact.name + ".vcf";
-  newLink.textContent = contact.name;
+  newLink.download = profile.name + ".vcf";
+  newLink.textContent = profile.name;
   newLink.href = url;
   
   newLink.click();
