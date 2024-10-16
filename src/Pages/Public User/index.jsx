@@ -102,9 +102,9 @@ const PublicUser = () => {
     <div className="min-h-screen bg-white mx-auto w-full md:w-2/6 text-gray-800 p-1 relative">
       {userData && userData.profile && (
         <Card className="shadow-md ">
-          <Logo/>
           {/* Profile Info Card */}
           <Card className="shadow-lg mb-6">
+          <Logo/>
             <div className="flex flex-col items-center mb-6">
               <img
                 src={userData.profile.image}
