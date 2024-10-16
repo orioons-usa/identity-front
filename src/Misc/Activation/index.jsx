@@ -30,7 +30,7 @@ const ActivationPage = () => {
                   setEmail(_o)
                   checkPaymentStatus(email).then((ek)=>{
                     if(typeof(ek.link) === String && ek.link !== null && ek.link !== undefined){
-                      setPaymentUrl(ek.link)
+                      setPaymentUrl(ek)
                       console.log(paymentUrl)
                     }
                   }).catch((ek)=>{
