@@ -155,7 +155,7 @@ const PublicUser = () => {
               <ul className="text-left">
                 {userData.profile.emails.map((email, index) => (
                   <li className='w-full my-2 bordered border-[1px]-gray rounded-lg px-3 py-2 flex ' key={index}>
-                    <PhoneFilled/> <a className='ml-2' href={`mailto:${email}`}>{email}</a>
+                    <MailFilled/> <a className='ml-2' href={`mailto:${email}`}>{email}</a>
                   </li>
                 ))}
               </ul>
@@ -164,7 +164,7 @@ const PublicUser = () => {
               <ul className="text-left">
                 {userData.profile.phones.map((phone, index) => (
                   <li className='w-full my-2 bordered border-[1px]-gray rounded-lg px-3 py-2 flex ' key={index}>
-                   <MailFilled/> <a className='ml-2' href={`tel:${phone}`}>{phone}</a>
+                   <PhoneFilled/> <a className='ml-2' href={`tel:${phone}`}>{phone}</a>
                   </li>
                 ))}
               </ul>

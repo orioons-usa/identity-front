@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Drawer, Button, Input, message, Tabs, Space, Card } from 'antd';
-import { EditOutlined, PlusOutlined, MinusOutlined } from '@ant-design/icons';
+import { EditOutlined, PlusOutlined, MinusOutlined, PhoneFilled, MailFilled } from '@ant-design/icons';
 import { updateUser } from '../../Function/Profile';
 import { fetchUser } from '../../Function/Authentication';
 import getSocialIcon from '../../Misc/Social Icons';
@@ -131,38 +131,44 @@ const UserProfile = () => {
               </div>
              </center>
             </div>
+            <Divider></Divider>
+            <div className="flex">
+
+            <button  onClick={() => {
+              setEditProfile(userData.profile); // Load existing profile data into the edit form
+              toggleDrawer();
+            }} className={`flex mr-1 items-center justify-center flex-none px-3 py-2 md:px-4 md:py-3 border-2 rounded-lg font-medium border-black bg-black text-white`}>
+                 <EditOutlined color='white' /> <span className='ml-2'>EDIT</span>
+                </button>
+           
+
+           
+            </div>
           </Card>
 
           {/* Tabs for Emails and Phones */}
           <Tabs defaultActiveKey="1">
             <TabPane tab="Emails" key="1">
-              <ul className='text-left'>
+              <ul className="text-left">
                 {userData.profile.emails.map((email, index) => (
-                  <li key={index}><a href={`mailto:${email}`}>{email}</a></li>
+                  <li className='w-full my-2 bordered border-[1px]-gray rounded-lg px-3 py-2 flex ' key={index}>
+                    <MailFilled/> <a className='ml-2' href={`mailto:${email}`}>{email}</a>
+                  </li>
                 ))}
               </ul>
             </TabPane>
             <TabPane tab="Phones" key="2">
-            <ul className='text-left'>
+              <ul className="text-left">
                 {userData.profile.phones.map((phone, index) => (
-                  <li key={index}><a href={`tel:{phone}`}>{phone}</a></li>
+                  <li className='w-full my-2 bordered border-[1px]-gray rounded-lg px-3 py-2 flex ' key={index}>
+                   <PhoneFilled/> <a className='ml-2' href={`tel:${phone}`}>{phone}</a>
+                  </li>
                 ))}
               </ul>
             </TabPane>
           </Tabs>
 
-          {/* Floating Action Button */}
-          <Button
-            type="primary"
-            shape="circle"
-            icon={<EditOutlined style={{ color: '#343A40' }} />}
-            onClick={() => {
-              setEditProfile(userData.profile); // Load existing profile data into the edit form
-              toggleDrawer();
-            }}
-            className="fixed bottom-6 right-6 bg-white shadow-lg"
-            size="large"
-          />
+        
 
           {/* Drawer for Editing Profile */}
           <Drawer
