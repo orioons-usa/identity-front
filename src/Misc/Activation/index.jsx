@@ -30,7 +30,7 @@ const ActivationPage = () => {
                   checkPaymentStatus(email).then((e)=>{
                     window.location = "./"
                   }).catch((e)=>{
-                    console.log(errorMes)
+                    setErrorMes(e.response.data.link)
                     setPaymentUrl(typeof(e.response.data.link) === String ? e.response.data.link : "")
                     setSD(true)
                   })
