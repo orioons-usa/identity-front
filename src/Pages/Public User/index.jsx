@@ -35,31 +35,31 @@ const PublicUser = () => {
 
 
   const handleSaveContact = () => {
-    const { profile } = userData;
+    // const { profile } = userData;
   
-    // Create the vCard content
-    const vcard = `
-      BEGIN:VCARD
-      VERSION:3.0
-      FN:${profile.name}
-      ORG:${profile.company}
-      EMAIL:${profile.emails[0]}
-      TEL:${profile.phones[0]}
-      NOTE:${profile.bio}
-      URL:${profile.socials[0]}
-      END:VCARD
-    `.trim(); // Trim whitespace for cleaner formatting
+    // // Create the vCard content
+    // const vcard = `
+    //   BEGIN:VCARD
+    //   VERSION:3.0
+    //   FN:${profile.name}
+    //   ORG:${profile.company}
+    //   EMAIL:${profile.emails[0]}
+    //   TEL:${profile.phones[0]}
+    //   NOTE:${profile.bio}
+    //   URL:${profile.socials[0]}
+    //   END:VCARD
+    // `.trim(); // Trim whitespace for cleaner formatting
   
-    // Encode vCard content to create a data URL
-    const vCardDataUrl = `data:text/vcard;charset=utf-8,${encodeURIComponent(vcard)}`;
+    // // Encode vCard content to create a data URL
+    // const vCardDataUrl = `data:text/vcard;charset=utf-8,${encodeURIComponent(vcard)}`;
   
-    // Create a temporary anchor element
-    const a = document.createElement('a');
-    a.href = vCardDataUrl;
-    a.download = `${profile.name}.vcf`; // Set filename
-    document.body.appendChild(a);
-    a.click(); // Trigger the download
-    document.body.removeChild(a); // Clean up
+    // // Create a temporary anchor element
+    // const a = document.createElement('a');
+    // a.href = vCardDataUrl;
+    // a.download = `${profile.name}.vcf`; // Set filename
+    // document.body.appendChild(a);
+    // a.click(); // Trigger the download
+    // document.body.removeChild(a); // Clean up
   };
   
 
