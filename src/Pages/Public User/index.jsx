@@ -4,6 +4,7 @@ import { MailFilled, PhoneFilled, PlusOutlined, SendOutlined } from '@ant-design
 import { getPublicProfile } from '../../Function/Profile';
 import getSocialIcon from '../../Misc/Social Icons';
 import 'tailwindcss/tailwind.css';
+import Loading from '../../Misc/Loading';
 
 const { TabPane } = Tabs;
 
@@ -28,7 +29,7 @@ const PublicUser = () => {
   }, []);
 
   if (!loaded || !userData) {
-    return <p>Loading...</p>;
+    return <Loading/>;
   }
 
   const handleSaveContact = () => {
