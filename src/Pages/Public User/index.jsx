@@ -34,49 +34,47 @@ const PublicUser = () => {
   const handleSaveContact = () => {
     const { profile } = userData;
   
-    // vCard content
-    const contact = `
+    // vCard content for the contact
+    const vcard = `
       BEGIN:VCARD
-      VERSION:3.0
-      N:${profile.name}
+      VERSION:4.0
+      FN:${profile.name}
       ORG:${profile.company}
       EMAIL:${profile.emails[0]}
-      TEL:${profile.phones[0]}
+      TEL;TYPE=work,voice:${profile.phones[0]}
       NOTE:${profile.bio}
       URL:${profile.socials.join(',')}
       END:VCARD
     `;
   
-    // Create a blob with the vCard content and proper MIME type
-    const blob = new Blob([contact], { type: 'text/vcard' });
+    // Create a blob with the vCard content
+    const blob = new Blob([vcard], { type: "text/vcard" });
+    const url = URL.createObjectURL(blob);
   
-    // Check for iOS Safari
-    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-  
-    if (isSafari) {
-      // For Safari (iOS), use a data URI for download
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const a = document.createElement('a');
-        a.href = reader.result;
-        a.download = `${profile.name}_contact.vcf`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-      };
-      reader.readAsDataURL(blob);
+    // Check if the browser supports the Web Share API
+    if (navigator.share) {
+      navigator
+        .share({
+          title: 'New Contact',
+          text: 'Save contact to your phone',
+          files: [new File([blob], `${profile.name}.vcf`, { type: 'text/vcard' })],
+        })
+        .then(() => {
+          console.log('Contact shared successfully');
+        })
+        .catch((error) => {
+          console.error('Error sharing contact:', error);
+        });
     } else {
-      // For other browsers, use Object URL
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${profile.name}_contact.vcf`;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url); // Release the object URL after download
-      document.body.removeChild(a);
+      // Fallback for browsers that do not support the Web Share API
+      const newLink = document.createElement('a');
+      newLink.download = `${profile.name}.vcf`;
+      newLink.href = url;
+      newLink.click();
+      URL.revokeObjectURL(url); // Clean up after download
     }
   };
+  
   
 
   return (
