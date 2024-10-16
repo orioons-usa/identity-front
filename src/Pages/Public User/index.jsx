@@ -80,7 +80,7 @@ const PublicUser = () => {
   
 
   return (
-    <div className="min-h-screen bg-white w-full md:w-2/5 text-gray-800 p-1 relative">
+    <div className="min-h-screen bg-white mx-auto w-full md:w-2/6 text-gray-800 p-1 relative">
       {userData && userData.profile && (
         <Card className="shadow-md p-1">
           {/* Profile Info Card */}
