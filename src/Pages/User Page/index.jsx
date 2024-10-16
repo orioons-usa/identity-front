@@ -1,107 +1,61 @@
-import React, { useEffect, useState } from 'react';
-import {
-  Card,
-  Typography,
-  List,
-  Space,
-  Drawer,
-  Button,
-  Form,
-  Input,
-  message,
-  Tabs,
-  FloatButton,
-  Divider,
-} from 'antd';
-import { EditFilled, MailOutlined, PhoneOutlined } from '@ant-design/icons';
+import React, { useState, useEffect } from 'react';
+import { Drawer, Button, Input, message } from 'antd';
+import { EditOutlined } from '@ant-design/icons';
 import { updateUser } from '../../Function/Profile';
 import { fetchUser } from '../../Function/Authentication';
-import getSocialIcon from '../../Misc/Social Icons';
-
-const { Title, Text } = Typography;
+import getSocialIcon from '../../Misc/SocialIcons'; // Assuming this fetches icons for social links
+import 'tailwindcss/tailwind.css'; // Ensure Tailwind is loaded
 
 const UserProfile = () => {
-  const [isDrawerVisible, setIsDrawerVisible] = useState(false);
-  const [form] = Form.useForm();
-  const [userData, setUserData] = useState({
+  const [userData, setUserData] = useState(null);
+  const [isDrawerVisible, setDrawerVisible] = useState(false);
+  const [editProfile, setEditProfile] = useState({
+    emails: [],
+    phones: [],
+    company: '',
+    bio: '',
+    socials: [],
     name: '',
-    email: '',
-    profile: {
-      phones: Array(5).fill(''), // Initialize with 5 empty phone fields
-      emails: Array(5).fill(''), // Initialize with 5 empty email fields
-      socials: Array(10).fill(''), // Initialize with 10 empty social fields
-      company: '',
-      bio: '',
-      experience: Array(10).fill({ role: '', company: '', duration: '' }), // Initialize with 10 empty experience objects
-      education: Array(5).fill({ degree: '', institution: '', year: '' }), // Initialize with 5 empty education objects
-    },
   });
 
-  // Fetch user data on component mount
   useEffect(() => {
     const userId = window.localStorage.getItem('_tex');
-    fetchUser(userId).then((data) => {
-      const defaultData = {
-        ...data,
-        profile: {
-          phones: data.profile.phones || Array(5).fill(''),
-          emails: data.profile.emails || Array(5).fill(''),
-          socials: data.profile.socials || Array(10).fill(''),
-          experience: data.profile.experience || Array(10).fill({ role: '', company: '', duration: '' }),
-          education: data.profile.education || Array(5).fill({ degree: '', institution: '', year: '' }),
-          company: data.profile.company || '',
-          bio: data.profile.bio || '',
-        },
-      };
-      setUserData(defaultData);
-      form.setFieldsValue(defaultData);
-    });
-  }, [form]);
+    fetchUser(userId).then((data) => setUserData(data)).catch(() => message.error('Failed to fetch user data'));
+  }, []);
 
-  // Handle opening and closing the drawer
   const toggleDrawer = () => {
-    setIsDrawerVisible(!isDrawerVisible);
+    setDrawerVisible(!isDrawerVisible);
   };
 
-  // Handle field changes and update the profile state
-  const handleFieldChange = () => {
-    const updatedProfile = form.getFieldsValue().profile;
-    setUserData((prevUserData) => ({
-      ...prevUserData,
-      profile: {
-        ...prevUserData.profile,
-        ...updatedProfile,
-      },
-    }));
+  const handleEditChange = (key, value) => {
+    setEditProfile({
+      ...editProfile,
+      [key]: value,
+    });
   };
 
   const handleUpdate = () => {
     const userId = window.localStorage.getItem('_tex');
-
-    // Ensure at least one email and one phone number is provided
-    if (!userData.profile.emails || userData.profile.emails.length === 0) {
+    if (!editProfile.emails || editProfile.emails.length === 0) {
       message.error('Please provide at least one email.');
       return;
     }
-    if (!userData.profile.phones || userData.profile.phones.length === 0) {
+    if (!editProfile.phones || editProfile.phones.length === 0) {
       message.error('Please provide at least one phone number.');
       return;
     }
 
-    // Clean profile data to ensure no empty strings or nulls
     const cleanedProfile = {
-      ...userData.profile,
-      emails: (userData.profile.emails || []).filter((email) => email && email.trim() !== ''),
-      phones: (userData.profile.phones || []).filter((phone) => phone && phone.trim() !== ''),
-      socials: (userData.profile.socials || []).filter((social) => social && social.trim() !== ''),
-      experience: userData.profile.experience.filter((exp) => exp.role && exp.company && exp.duration),
-      education: userData.profile.education.filter((edu) => edu.degree && edu.institution && edu.year),
+      ...editProfile,
+      emails: editProfile.emails.filter((email) => email && email.trim() !== ''),
+      phones: editProfile.phones.filter((phone) => phone && phone.trim() !== ''),
+      socials: editProfile.socials.filter((social) => social && social.trim() !== ''),
     };
 
     updateUser(userId, cleanedProfile)
       .then(() => {
         message.success('Profile updated successfully');
-        setUserData((prevUserData) => ({ ...prevUserData, profile: cleanedProfile }));
+        setUserData((prevData) => ({ ...prevData, profile: cleanedProfile }));
         toggleDrawer();
       })
       .catch(() => {
@@ -109,205 +63,140 @@ const UserProfile = () => {
       });
   };
 
-  if (!userData) {
-    return <p>Loading...</p>;
-  }
-
-  const tabItems = [
-    {
-      key: '1',
-      label: 'Phone Numbers',
-      children: userData.profile.phones && userData.profile.phones.length > 0 ? (
-        userData.profile.phones.map((phone, index) => (
-          <div key={index} className="flex items-center">
-            <PhoneOutlined className="mr-2 text-green-500" />
-            <a href={`tel:${phone}`}>{phone}</a>
-          </div>
-        ))
-      ) : (
-        <p>No phone numbers available</p>
-      ),
-    },
-    {
-      key: '2',
-      label: 'Emails',
-      children: userData.profile.emails && userData.profile.emails.length > 0 ? (
-        userData.profile.emails.map((email, index) => (
-          <div key={index} className="flex items-center">
-            <MailOutlined className="mr-2 text-blue-500" />
-            <a href={`mailto:${email}`} className="text-blue-600">
-              {email}
-            </a>
-          </div>
-        ))
-      ) : (
-        <p>No emails available</p>
-      ),
-    },
-  ];
-
   return (
-    <div className="profile-container">
-      <FloatButton icon={<EditFilled />} onClick={toggleDrawer} />
-      <Drawer
-        title="Edit Profile"
-        visible={isDrawerVisible}
-        onClose={toggleDrawer}
-        footer={
-          <div className="drawer-footer">
-            <Button className="m-2" onClick={toggleDrawer}>
-              Cancel
-            </Button>
-            <Button className="m-2" type="primary" onClick={() => form.submit()}>
-              Save Changes
-            </Button>
+    <div className="min-h-screen bg-white text-gray-800 p-6">
+      {userData && userData.profile && (
+        <>
+          {/* Profile Header */}
+          <div className="flex flex-col items-center mb-6">
+            <img
+              src={userData.profile.image}
+              alt="Profile"
+              className="rounded-full w-40 h-40 mb-4"
+            />
+            <h2 className="text-3xl font-bold text-gray-900">{userData.profile.name}</h2>
+            <p className="text-gray-600">{userData.profile.company}</p>
+            <p className="text-gray-500">{userData.profile.bio}</p>
           </div>
-        }
-      >
-        <Form
-          form={form}
-          layout="vertical"
-          onFieldsChange={handleFieldChange}
-          onFinish={handleUpdate}
-        >
-          <Form.Item
-            label="Name"
-            name="name"
-            rules={[{ required: true, message: 'Please enter your name' }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Email"
-            name="email"
-            rules={[{ required: true, message: 'Please enter your email' }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item label="Company" name={['profile', 'company']}>
-            <Input />
-          </Form.Item>
-          <Form.Item label="Bio" name={['profile', 'bio']}>
-            <Input.TextArea />
-          </Form.Item>
-          <ProfileEditableFields
-            form={form}
-            fieldName="emails"
-            label="Emails"
-            placeholder="Enter email"
-          />
-          <ProfileEditableFields
-            form={form}
-            fieldName="phones"
-            label="Phone Numbers"
-            placeholder="Enter phone number"
-          />
-          <ProfileEditableFields
-            form={form}
-            fieldName="socials"
-            label="Social Links"
-            placeholder="Enter social link"
-          />
-          <ProfileEditableFields
-            form={form}
-            fieldName="experience"
-            label="Experience"
-          />
-          <ProfileEditableFields
-            form={form}
-            fieldName="education"
-            label="Education"
-          />
-        </Form>
-      </Drawer>
 
-      <Card className="user-profile-card">
-        <div className="flex flex-col justify-center">
-          <div className=" flex flex-col md:flex-row space-y-3 md:space-y-0 rounded-xl shadow-lg w-full md:max-w-3xl mx-auto border border-white bg-white">
-            <div className="w-full md:w-1/3 bg-white grid place-items-center">
-              <img
-                src="https://images.pexels.com/photos/4381392/pexels-photo-4381392.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-                alt="User Image"
-                className="rounded-full w-32"
+          {/* Contact Information */}
+          <div className="mb-4">
+            <h3 className="text-xl font-semibold">Contact Information</h3>
+            <p>Emails:</p>
+            <ul>
+              {userData.profile.emails.map((email, index) => (
+                <li key={index}>{email}</li>
+              ))}
+            </ul>
+            <p>Phone:</p>
+            <ul>
+              {userData.profile.phones.map((phone, index) => (
+                <li key={index}>{phone}</li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Social Links */}
+          <div className="mb-6">
+            <h3 className="text-xl font-semibold">Social Links</h3>
+            <div className="flex space-x-4">
+              {userData.profile.socials.map((social, index) => (
+                <a
+                  key={index}
+                  href={social}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-700 hover:text-gray-900"
+                >
+                  {getSocialIcon(social)}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Edit Button */}
+          <Button
+            type="primary"
+            icon={<EditOutlined />}
+            onClick={() => {
+              setEditProfile(userData.profile); // Load existing profile data into the edit form
+              toggleDrawer();
+            }}
+          >
+            Edit Profile
+          </Button>
+
+          {/* Drawer for Editing Profile */}
+          <Drawer
+            title="Edit Profile"
+            placement="right"
+            onClose={toggleDrawer}
+            visible={isDrawerVisible}
+            width={400}
+          >
+            {/* Name */}
+            <div className="mb-4">
+              <Input
+                placeholder="Name"
+                value={editProfile.name}
+                onChange={(e) => handleEditChange('name', e.target.value)}
               />
             </div>
-            <div className="w-full md:w-2/3 bg-white flex flex-col space-y-2 p-3">
-              <h3 className="font-black text-gray-800 md:text-3xl text-xl">
-                {userData.name}
-              </h3>
-              <Text>{userData.email}</Text>
-              <Text className="block text-gray-500">Company: {userData.profile.company}</Text>
-              <p className="md:text-lg text-gray-500 text-base">{userData.profile.bio}</p>
-              <center>
-                <Space size="small">
-                  {userData.profile.socials.length > 0 ? (
-                    userData.profile.socials.map((social, index) => (
-                      <a
-                        href={social}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        key={index}
-                        className="text-xl"
-                      >
-                        {getSocialIcon(social)}
-                      </a>
-                    ))
-                  ) : (
-                    <p>No social links available</p>
-                  )}
-                </Space>
-              </center>
+
+            {/* Company */}
+            <div className="mb-4">
+              <Input
+                placeholder="Company"
+                value={editProfile.company}
+                onChange={(e) => handleEditChange('company', e.target.value)}
+              />
             </div>
-          </div>
-        </div>
-        <Tabs defaultActiveKey="1" items={tabItems} />
-        <ProfileDetailsSection title="Experience" data={userData.profile.experience} />
-        <ProfileDetailsSection title="Education" data={userData.profile.education} />
-      </Card>
+
+            {/* Bio */}
+            <div className="mb-4">
+              <Input.TextArea
+                placeholder="Bio"
+                value={editProfile.bio}
+                onChange={(e) => handleEditChange('bio', e.target.value)}
+              />
+            </div>
+
+            {/* Emails */}
+            <div className="mb-4">
+              <Input.TextArea
+                placeholder="Emails (comma separated)"
+                value={editProfile.emails.join(', ')}
+                onChange={(e) => handleEditChange('emails', e.target.value.split(',').map((email) => email.trim()))}
+              />
+            </div>
+
+            {/* Phones */}
+            <div className="mb-4">
+              <Input.TextArea
+                placeholder="Phones (comma separated)"
+                value={editProfile.phones.join(', ')}
+                onChange={(e) => handleEditChange('phones', e.target.value.split(',').map((phone) => phone.trim()))}
+              />
+            </div>
+
+            {/* Social Links */}
+            <div className="mb-4">
+              <Input.TextArea
+                placeholder="Social Links (comma separated)"
+                value={editProfile.socials.join(', ')}
+                onChange={(e) => handleEditChange('socials', e.target.value.split(',').map((link) => link.trim()))}
+              />
+            </div>
+
+            {/* Save Button */}
+            <Button type="primary" onClick={handleUpdate}>
+              Save Changes
+            </Button>
+          </Drawer>
+        </>
+      )}
     </div>
   );
 };
-
-const ProfileEditableFields = ({ form, fieldName, label, placeholder }) => (
-  <Form.List name={['profile', fieldName]}>
-    {(fields, { add, remove }) => (
-      <>
-        <div className="flex">
-          <Title level={5}>{label}</Title>
-          <Button type="link" onClick={() => add()}>
-            + Add {label}
-          </Button>
-        </div>
-        {fields.map((field, index) => (
-          <Form.Item key={field.key} label={`${label} ${index + 1}`} {...field}>
-            <Input placeholder={placeholder} />
-            <Button type="link" danger onClick={() => remove(field.name)}>
-              Remove
-            </Button>
-          </Form.Item>
-        ))}
-      </>
-    )}
-  </Form.List>
-);
-
-const ProfileDetailsSection = ({ title, data }) => (
-  <div className="profile-section">
-    <Title level={4}>{title}</Title>
-    {data && data.length > 0 ? (
-      <List
-        bordered
-        dataSource={data}
-        renderItem={(item) => (
-          <List.Item>
-            <Text strong>{item.role || item.degree}</Text> at <Text>{item.company || item.institution}</Text> ({item.duration || item.year})
-          </List.Item>
-        )}
-      />
-    ) : (
-      <p>No {title.toLowerCase()} available</p>
-    )}
-  </div>
-);
 
 export default UserProfile;
