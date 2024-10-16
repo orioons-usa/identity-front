@@ -33,6 +33,8 @@ const PublicUser = () => {
 
   const handleSaveContact = () => {
     const { profile } = userData;
+  
+    // vCard content
     const contact = `
       BEGIN:VCARD
       VERSION:3.0
@@ -44,14 +46,38 @@ const PublicUser = () => {
       URL:${profile.socials.join(',')}
       END:VCARD
     `;
+  
+    // Create a blob with the vCard content and proper MIME type
     const blob = new Blob([contact], { type: 'text/vcard' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${profile.name}_contact.vcf`;
-    a.click();
-    window.URL.revokeObjectURL(url);
+  
+    // Check for iOS Safari
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  
+    if (isSafari) {
+      // For Safari (iOS), use a data URI for download
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const a = document.createElement('a');
+        a.href = reader.result;
+        a.download = `${profile.name}_contact.vcf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      };
+      reader.readAsDataURL(blob);
+    } else {
+      // For other browsers, use Object URL
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${profile.name}_contact.vcf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url); // Release the object URL after download
+      document.body.removeChild(a);
+    }
   };
+  
 
   return (
     <div className="min-h-screen bg-white text-gray-800 p-1 relative">
@@ -74,7 +100,7 @@ const PublicUser = () => {
 
             {/* Social Links */}
             <div className="mb-6">
-              <h3 className="text-xl font-semibold">Social Links</h3>
+              <h3 className="text-xl font-semibold mb-4">Social Links</h3>
               <div className="flex space-x-4">
                 {userData.profile.socials.map((social, index) => (
                   <a
