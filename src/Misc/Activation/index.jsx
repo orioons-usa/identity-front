@@ -28,13 +28,13 @@ const ActivationPage = () => {
               _o = _o[0]
                if(emailRegex.test(_o) === true){
                   setEmail(_o)
-                  checkPaymentStatus(email).then((e)=>{
-                    window.location = "./"
-                  }).catch((ek)=>{
+                  checkPaymentStatus(email).then((ek)=>{
                     if(typeof(ek.response.data.link) === String && ek.response.data.link !== null && ek.response.data.link !== undefined){
                       setPaymentUrl(ek.response.data.link)
                       console.log(paymentUrl)
                     }
+                  }).catch((ek)=>{
+                    
                     setSD(true)
                   })
                }else{
