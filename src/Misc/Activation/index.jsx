@@ -29,8 +29,8 @@ const ActivationPage = () => {
                if(emailRegex.test(_o) === true){
                   setEmail(_o)
                   checkPaymentStatus(email).then((ek)=>{
-                    if(typeof(ek.response.data.link) === String && ek.response.data.link !== null && ek.response.data.link !== undefined){
-                      setPaymentUrl(ek.response.data.link)
+                    if(typeof(ek.link) === String && ek.link !== null && ek.link !== undefined){
+                      setPaymentUrl(ek.link)
                       console.log(paymentUrl)
                     }
                   }).catch((ek)=>{
